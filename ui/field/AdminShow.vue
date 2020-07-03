@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="!isMultiple">
-      <a :href="value" target="_blank">
+      <a :href="value" target="_blank" rel="noopener">
         <span class="mr-1">
           <i class="fas fa-paperclip" />
         </span>
@@ -12,7 +12,7 @@
     <template v-if="isMultiple">
       <div class="flex flex-col">
         <div v-for="(file, index) in files" :key="`file-${index}`" class="w-auto mb-2">
-          <a :href="file" target="_blank">
+          <a :href="file" target="_blank" rel="noopener">
             <span class="mr-1">
               <i class="fas fa-paperclip" />
             </span>
