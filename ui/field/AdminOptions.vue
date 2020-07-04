@@ -33,14 +33,15 @@
 </template>
 
 <script>
-import isEmpty from 'lodash.isempty'
+import { isEmpty } from 'lodash'
 
 export default {
   props: [
     'value',
     'field',
-    'module',
-    'errors'
+    'package',
+    'errors',
+    'fields'
   ],
 
   watch: {

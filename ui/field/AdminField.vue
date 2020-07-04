@@ -35,9 +35,7 @@
 </template>
 
 <script>
-import get from 'lodash.get'
-import isEmpty from 'lodash.isempty'
-import isEqual from 'lodash.isequal'
+import { get, isEmpty, isEqual } from 'lodash'
 
 export default {
   props: [
@@ -46,7 +44,6 @@ export default {
     'errors',
     'formMeta',
     'model',
-    'module',
     'action'
   ],
 
