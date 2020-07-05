@@ -5,13 +5,32 @@ namespace Adaptcms\FieldFile\Field;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Adaptcms\Base\Models\PackageField;
 use Adaptcms\Fields\FieldType;
 use Adaptcms\FieldFile\Traits\HasFileMigrations;
-use Adaptcms\Modules\Models\PackageField;
 
 class FieldFile extends FieldType
 {
   use HasFileMigrations;
+
+  /**
+  * @var array
+  */
+  public $defaultSettings = [
+    'options' => [
+      'is_sortable'        => false,
+      'is_searchable'      => false,
+      'is_required_create' => false,
+      'is_required_edit'   => false
+    ],
+    'action_rules' => [
+      'index'  => false,
+      'create' => true,
+      'edit'   => true,
+      'show'   => true,
+      'search' => false
+    ]
+  ];
 
   /**
   * @var boolean
@@ -211,5 +230,17 @@ class FieldFile extends FieldType
         $model->save();
       }
     }
+  }
+
+  /**
+  * Create Field Rules
+  *
+  * @return array
+  */
+  public function createFieldRules()
+  {
+    return [
+      'meta.mode' => 'required'
+    ];
   }
 }

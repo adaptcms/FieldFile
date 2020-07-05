@@ -28,12 +28,18 @@
           <label>Multiple Files</label>
         </div>
       </div>
+
+      <template v-if="errorsList.length">
+        <span v-for="error in errorsList" :key="error" class="border-red-700 block px-2 py-2 text-sm text-red-100 bg-red-500">
+          {{ error }}
+        </span>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
 export default {
   props: [
@@ -59,10 +65,26 @@ export default {
     }
   },
 
+  computed: {
+    hasError () {
+      let key = 'meta.mode'
+      let errors = get(this.$page, 'errors')
+
+      return (typeof errors[key] !== 'undefined')
+    },
+
+    errorsList () {
+      let key = 'meta.mode'
+      let errors = get(this.$page, 'errors')
+
+      return (typeof errors[key] !== 'undefined' ? errors[key] : [])
+    }
+  },
+
   data () {
     return {
       selected: {
-        mode: 'single'
+        mode: null
       }
     }
   },
@@ -70,8 +92,6 @@ export default {
   mounted () {
     if (!isEmpty(this.value)) {
       this.selected = this.value
-    } else {
-      this.$emit('input', this.selected)
     }
   }
 }
