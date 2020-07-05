@@ -29,7 +29,7 @@ trait HasFileMigrations
     $model = $package->customModel();
 
     // get model file
-    $contents = Storage::disk('modules')->get($package->name . '.php');
+    $contents = $package->getModelFileContents();
 
     $find = [];
     $replace = [];
@@ -52,7 +52,7 @@ trait HasFileMigrations
     if (!empty($find) && !empty($replace)) {
       $contents = str_replace($find, $replace, $contents);
 
-      Storage::disk('modules')->put($package->name . '.php', $contents);
+      $package->putModelFileContents($contents);
     }
 
     // get skeleton contents
@@ -166,7 +166,7 @@ trait HasFileMigrations
     $model = $package->customModel();
 
     // get model file
-    $contents = Storage::disk('modules')->get($package->name . '.php');
+    $contents = $package->getModelFileContents();
 
     $find = [];
     $replace = [];
@@ -189,7 +189,7 @@ trait HasFileMigrations
     if (!empty($find) && !empty($replace)) {
       $contents = str_replace($find, $replace, $contents);
 
-      Storage::disk('modules')->put($package->name . '.php', $contents);
+      $package->putModelFileContents($contents);
     }
 
     // get skeleton contents
