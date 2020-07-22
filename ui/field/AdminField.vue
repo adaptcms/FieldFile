@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between">
+  <div class="flex flex-col items-center lg:flex-row lg:justify-between lg:items-start">
     <div class="w-auto">
       <label
         :id="`form-${field.column_name}`"
@@ -20,7 +20,7 @@
       </label>
     </div>
 
-    <div class="w-auto flex flex-col justify-right text-right">
+    <div class="w-auto flex flex-col mt-4 text-right lg:justify-right lg:mt-0">
       <div v-for="(file, index) in files" :key="`file-${file.name}`" class="w-full mb-1">
         <span class="mr-1">{{ file.file_name || file.name }}</span>
         <span
