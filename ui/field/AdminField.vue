@@ -10,12 +10,12 @@
 
         <template v-if="isMultiple">
           <span class="mt-2 text-base leading-normal">Select files</span>
-          <input type="file" class="hidden" ref="fileInput" @input="setFiles" multiple />
+          <input type="file" class="hidden" ref="fileInput" @input="setUploadFiles" multiple />
         </template>
 
         <template v-if="!isMultiple">
           <span class="mt-2 text-base leading-normal">Select a file</span>
-          <input type="file" class="hidden" ref="fileInput" @input="setFiles" />
+          <input type="file" class="hidden" ref="fileInput" @input="setUploadFiles" />
         </template>
       </label>
     </div>
@@ -77,7 +77,7 @@ export default {
   },
 
   methods: {
-    setFiles () {
+    setUploadFiles () {
       if (!this.isMultiple && this.files.length) {
         this.removeFile(0, this.files[0], false)
       }
