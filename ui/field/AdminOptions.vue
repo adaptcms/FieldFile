@@ -92,6 +92,8 @@ export default {
   mounted () {
     if (!isEmpty(this.value)) {
       this.selected = this.value
+    } else {
+      this.$emit('input', this.selected)
     }
   }
 }
