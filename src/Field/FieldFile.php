@@ -243,4 +243,16 @@ class FieldFile extends FieldType
       'meta.mode' => 'required'
     ];
   }
+
+  /**
+  * Update Field Rules
+  *
+  * @return array
+  */
+  public function updateFieldRules()
+  {
+    return [
+      'meta.mode' => 'required'
+    ];
+  }
 }
