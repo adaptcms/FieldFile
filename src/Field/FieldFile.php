@@ -255,4 +255,96 @@ class FieldFile extends FieldType
       'meta.mode' => 'required'
     ];
   }
+
+  /**
+  * Save To Settings
+  *
+  * @param Model   $model
+  * @param Request $request
+  * @param array   $field
+  * @param string  $settingsKey
+  *
+  * @return void
+  */
+  public function saveToSettings($model, Request $request, array $field, $settingsKey)
+  {
+    // init vars
+    $columnName = $field['column_name'];
+    $isMultiple = ($field['meta']['mode'] === 'multiple');
+
+    $currentValue = $model->settings()->get($settingsKey);
+
+    if ($isMultiple) {
+      $values = is_null($currentValue) ? [] : $currentValue;
+    } else {
+      $values = is_null($currentValue) ? [] : [ $currentValue ];
+    }
+
+    // delete existing file(s) if there are any
+    $media = $model->getMedia($columnName);
+    $removeFiles = $request->removeFiles;
+
+    if ($media->count() && !empty($removeFiles)) {
+      $mediaToDelete = $media->whereIn('id', $removeFiles);
+
+      // unset column value if no media no longer present
+      if ($mediaToDelete->count() === $media->count()) {
+        $model->settings()->set($settingsKey, null);
+      }
+
+      foreach ($mediaToDelete as $item) {
+        // \Log::info('deleted file: ' . $item->file_name);
+
+        $findKey = array_search($item->getFullUrl(), $values);
+
+        if ($findKey !== false) {
+          unset($values[$findKey]);
+        }
+
+        $item->delete();
+      }
+    }
+
+    // \Log::info($values);
+
+    // ensure files have been uploaded
+    $fileData = $request->$columnName;
+
+    if (!empty($fileData) && $fileData !== 'null') {
+      // handle uploading the file contents
+      $handleFile = function ($file) use ($model, $columnName) {
+        $filename = $file->getClientOriginalName();
+
+        // save file to media collection
+        $uploadedFile = $model
+          ->addMedia($file->path())
+          ->usingName($filename)
+          ->usingFileName($filename)
+          ->toMediaCollection($columnName);
+
+        // \Log::info('uploaded file: ' . $uploadedFile->getFullUrl());
+
+        return $uploadedFile->getFullUrl();
+      };
+
+      // set column data to either a json array of file urls
+      // or a single file url string
+      foreach ($fileData as $file) {
+        $values[] = $handleFile($file);
+      }
+
+      if (!empty($values)) {
+        if ($isMultiple) {
+          $fileValue = $values;
+        } else {
+          $fileValue = $values[0];
+        }
+
+        // \Log::info($values);
+
+        // save file data
+        $model->settings()->set($settingsKey, $fileValue);
+      }
+    }
+  }
 }

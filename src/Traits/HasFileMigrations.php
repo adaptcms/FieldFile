@@ -59,7 +59,7 @@ trait HasFileMigrations
     $contents = Storage::disk('packages')->get('Adaptcms/Fields/src/Skeletons/Migrations/CreateColumn.php');
 
     // get placeholder replacements
-    $ucTable = Str::plural($package->name);
+    $ucTable = Str::studly(Str::plural($package->name));
     $lcTable = Str::plural(Str::snake($package->name));
     $ucColumn = Str::studly($packageField->column_name);
     $lcColumn = Str::snake($packageField->column_name);
@@ -119,7 +119,7 @@ trait HasFileMigrations
     $oldColumnName = $packageField->getOriginal('column_name');
     $newColumName = $packageField->column_name;
 
-    $ucTable = Str::plural($package->name);
+    $ucTable = Str::studly(Str::plural($package->name));
     $lcTable = Str::plural(Str::snake($package->name));
     $ucColumn = Str::studly($oldColumnName);
     $oldColumn = Str::snake($oldColumnName);
@@ -196,7 +196,7 @@ trait HasFileMigrations
     $contents = Storage::disk('packages')->get('Adaptcms/Fields/src/Skeletons/Migrations/DropColumn.php');
 
     // replace placeholders with table & column names
-    $ucTable = Str::plural($package->name);
+    $ucTable = Str::studly(Str::plural($package->name));
     $lcTable = Str::plural(Str::snake($package->name));
     $ucColumn = Str::studly($packageField->column_name);
     $lcColumn = Str::snake($packageField->column_name);
