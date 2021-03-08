@@ -122,6 +122,27 @@ class FieldFile extends FieldType
   }
 
   /**
+  * With Settings Form Meta
+  *
+  * @param Request $request
+  * @param object  $model
+  * @param string  $columnName
+  *
+  * @return array
+  */
+  public function withSettingsFormMeta(Request $request, $model, string $columnName)
+  {
+    $meta = [];
+
+    // set media info to view
+    if (!empty($model)) {
+      $meta = $model->getMedia($columnName);
+    }
+
+    return $meta;
+  }
+
+  /**
   * After Model Store
   *
   * @param Model        $model
