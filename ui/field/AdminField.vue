@@ -48,7 +48,7 @@ import { get, isEmpty, isEqual } from 'lodash'
 
 export default {
   props: [
-    'value',
+    'modelValue',
     'field',
     'errors',
     'formMeta',
@@ -56,11 +56,19 @@ export default {
     'action'
   ],
 
-  watch: {
-    selected (newVal, oldVal) {
-      let selected = newVal.filter(row => typeof row.id === 'undefined')
+  emits: [
+    'update:modelValue',
+    'extra'
+  ],
 
-      this.$emit('input', selected)
+  watch: {
+    selected: {
+      handler: function (newVal, oldVal) {
+        let selected = newVal.filter(row => typeof row.id === 'undefined')
+
+        this.$emit('update:modelValue', selected)
+      },
+      deep: true
     },
 
     removeFiles (newVal, oldVal) {
@@ -148,7 +156,7 @@ export default {
   },
 
   mounted () {
-    if (!isEmpty(this.value)) {
+    if (!isEmpty(this.modelValue)) {
       let media = this.formMeta[this.field.column_name]
 
       if (media.length) {

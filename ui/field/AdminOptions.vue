@@ -9,7 +9,7 @@
         <div class="w-auto mr-3">
           <input
             type="radio"
-            class="text-base py-3 px-3 shadow-sm inline-block"
+            class="text-base py-3 px-3 shadow-sm inline-block mr-1"
             v-model="selected.mode"
             value="single"
           />
@@ -20,7 +20,7 @@
         <div class="w-auto">
           <input
             type="radio"
-            class="text-base py-3 px-3 shadow-sm inline-block"
+            class="text-base py-3 px-3 shadow-sm inline-block mr-1"
             v-model="selected.mode"
             value="multiple"
           />
@@ -43,15 +43,19 @@ import { get, isEmpty } from 'lodash'
 
 export default {
   props: [
-    'value',
+    'modelValue',
     'field',
     'package',
     'errors',
     'fields'
   ],
 
+  emits: [
+    'update:modelValue'
+  ],
+
   watch: {
-    value (newVal, oldVal) {
+    modelValue (newVal, oldVal) {
       if (newVal !== oldVal) {
         this.selected = newVal
       }
@@ -59,7 +63,7 @@ export default {
 
     selected: {
       handler: function (newVal, oldVal) {
-        this.$emit('input', newVal)
+        this.$emit('update:modelValue', newVal)
       },
       deep: true
     }
@@ -68,16 +72,14 @@ export default {
   computed: {
     hasError () {
       let key = 'meta.mode'
-      let errors = get(this.$page, 'props.errors')
 
-      return (typeof errors[key] !== 'undefined')
+      return (typeof this.errors[key] !== 'undefined')
     },
 
     errorsList () {
       let key = 'meta.mode'
-      let errors = get(this.$page, 'props.errors')
 
-      return (typeof errors[key] !== 'undefined' ? errors[key] : [])
+      return (typeof this.errors[key] !== 'undefined' ? this.errors[key].messages : [])
     }
   },
 
@@ -90,10 +92,10 @@ export default {
   },
 
   mounted () {
-    if (!isEmpty(this.value)) {
-      this.selected = this.value
+    if (!isEmpty(this.modelValue)) {
+      this.selected = this.modelValue
     } else {
-      this.$emit('input', this.selected)
+      this.$emit('update:modelValue', this.selected)
     }
   }
 }
